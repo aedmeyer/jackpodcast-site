@@ -1,9 +1,104 @@
-<html>
-    <Head><title>The Jack Show</title></head>
-    
-    <body>
-        <h1>The Jack Show</h1>
-        Hello.
-    </body>
-    </html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Jack Show — Archives</title>
+  <link rel="preload" href="assets/style.css" as="style">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="wrap">
+    <h1>The Jack Show — Archives</h1>
+    <p class="tagline">A 10-year time capsule of dad + kid chaos. Thanks for listening.</p>
+    <img class="cover" src="assets/podcast.jpg" alt="The Jack Show cover">
+  </header>
 
+  <main class="wrap">
+    <section>
+      <h2>Episodes</h2>
+      <p class="hint">Add your MP3/M4A files in <code>/episodes</code> and list them in <code>/episodes/episodes.json</code>.</p>
+      <div id="player" class="player">
+        <audio id="audio" controls preload="none">
+          Your browser does not support the audio element.
+        </audio>
+        <div id="nowplaying" class="np">Select an episode to play</div>
+      </div>
+      <ul id="episodeList" class="episodes"></ul>
+    </section>
+
+    <section>
+      <h2>About</h2>
+      <p>
+        This static site is hosted on Amazon S3 and served via CloudFront over HTTPS.
+        Audio files are listed via a simple JSON manifest and can be played inline or downloaded.
+      </p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p>© <span id="year"></span> The Jack Show. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    async function loadEpisodes() {
+      try {
+        const res = await fetch('episodes/episodes.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to load episodes.json');
+        const data = await res.json();
+        renderEpisodes(data.episodes || []);
+      } catch (e) {
+        console.error(e);
+        const list = document.getElementById('episodeList');
+        list.innerHTML = '<li class="empty">Could not load episodes list. Make sure /episodes/episodes.json exists.</li>';
+      }
+    }
+
+    function renderEpisodes(items) {
+      const audio = document.getElementById('audio');
+      const now = document.getElementById('nowplaying');
+      const list = document.getElementById('episodeList');
+      list.innerHTML = '';
+
+      const makeItem = (ep, i) => {
+        const li = document.createElement('li');
+        li.className = 'episode';
+        li.innerHTML = \`
+          <div class="info">
+            <div class="title">Ep \${ep.number}: \${ep.title}</div>
+            \${ep.date ? '<div class="date">' + ep.date + '</div>' : ''}
+            \${ep.description ? '<div class="desc">' + ep.description + '</div>' : ''}
+          </div>
+          <div class="actions">
+            <button class="play" aria-label="Play episode">Play</button>
+            <a class="download" href="\${ep.file}" download>Download</a>
+          </div>
+        \`;
+
+        li.querySelector('.play').addEventListener('click', () => {
+          audio.src = ep.file;
+          audio.play();
+          now.textContent = 'Now playing — Ep ' + ep.number + ': ' + ep.title;
+          // Scroll player into view on mobile
+          document.getElementById('player').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        return li;
+      };
+
+      if (!items.length) {
+        const li = document.createElement('li');
+        li.className = 'empty';
+        li.textContent = 'No episodes listed yet. Edit /episodes/episodes.json to add some!';
+        list.appendChild(li);
+      } else {
+        items.forEach((ep, i) => list.appendChild(makeItem(ep, i)));
+      }
+    }
+
+    loadEpisodes();
+  </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "episodes": [
+    {
+      "number": 1,
+      "title": "000.1-TheJackShow",
+      "date": "2015-03-14",
+      "description": "Where it all began.",
+      "file": "episodes/000.1-TheJackShow.mp3"
+    },
+    {
+      "number": 2,
+      "title": "000.2-TheJackShow",
+      "date": "2015-03-28",
+      "description": "Featuring surprise appearances.",
+      "file": "episodes/000.2-TheJackShow.mp3"
+    }
+  ]
+}

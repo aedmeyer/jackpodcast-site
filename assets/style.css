@@ -1,0 +1,28 @@
+/* Minimal, clean defaults with simple player */
+:root { --fg:#0c0c0c; --bg:#f8f8fb; --muted:#6b7280; --accent:#2563eb; }
+* { box-sizing:border-box; }
+html,body { margin:0; padding:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+.wrap { max-width:900px; margin:0 auto; padding:24px; }
+header { text-align:center; padding-top:32px; }
+h1 { font-size:2.2rem; margin:0 0 8px; }
+.tagline { color:var(--muted); margin:0 0 16px; }
+.cover { width:200px; max-width:40vw; height:auto; display:block; margin:12px auto 0; }
+h2 { margin-top:28px; }
+.player { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:16px; margin:10px 0 16px; box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+.player audio { width:100%; display:block; }
+.np { margin-top:8px; color:var(--muted); font-size:0.95rem; }
+.episodes { list-style:none; padding:0; margin:12px 0; }
+.episode { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:14px 16px; margin:10px 0; display:flex; align-items:center; justify-content:space-between; gap:16px; box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+.info .title { font-weight:700; }
+.info .date { color:var(--muted); font-size:0.9rem; }
+.info .desc { color:var(--muted); font-size:0.95rem; margin-top:4px; }
+.actions { display:flex; gap:10px; align-items:center; }
+button.play { background:var(--accent); color:#fff; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:600; }
+button.play:hover { filter: brightness(0.95); }
+a.download { text-decoration:none; font-weight:600; color:var(--accent); }
+.empty { color:var(--muted); background:#fff; border:1px dashed #e5e7eb; border-radius:12px; padding:16px; text-align:center; }
+footer { color:var(--muted); text-align:center; padding-bottom:40px; }
+@media (max-width: 640px) {
+  .episode { flex-direction:column; align-items:flex-start; }
+  .actions { width:100%; justify-content:flex-start; }
+}
